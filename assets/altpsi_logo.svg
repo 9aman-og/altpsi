@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">AltPsi</title>
+  <desc id="desc">An open psi path with one alternative branch.</desc>
+  <defs>
+    <linearGradient id="altpsi-field" x1="70" y1="44" x2="438" y2="470" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#202531"/>
+      <stop offset=".52" stop-color="#0d1017"/>
+      <stop offset="1" stop-color="#07080c"/>
+    </linearGradient>
+    <linearGradient id="altpsi-signal" x1="112" y1="126" x2="306" y2="374" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#75f3ff"/>
+      <stop offset=".55" stop-color="#7d9cff"/>
+      <stop offset="1" stop-color="#b9a7ff"/>
+    </linearGradient>
+  </defs>
+  <rect x="28" y="28" width="456" height="456" rx="132" fill="url(#altpsi-field)"/>
+  <rect x="29" y="29" width="454" height="454" rx="131" fill="none" stroke="#fff" stroke-opacity=".16" stroke-width="2"/>
+  <path d="M256 112v288" fill="none" stroke="#f7f9ff" stroke-width="34" stroke-linecap="round"/>
+  <path d="M130 136v91c0 75 56 133 126 133s126-58 126-133v-91" fill="none" stroke="#f7f9ff" stroke-width="34" stroke-linecap="round"/>
+  <path d="M130 136v91c0 59 34 106 82 125" fill="none" stroke="url(#altpsi-signal)" stroke-width="34" stroke-linecap="round"/>
+  <path d="M101 104h80" fill="none" stroke="#75f3ff" stroke-width="16" stroke-linecap="round" opacity=".9"/>
+</svg>

@@ -1,0 +1,18 @@
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp
+_tmp_*
+
+# local tooling artifacts
+__pycache__/
+.pytest_cache/
+*.db
+
+# local function credentials
+supabase/functions/.env
+supabase/functions/.env.*
+!.env.example
+
+# generated Supabase CLI linkage/cache metadata
+supabase/.temp/
