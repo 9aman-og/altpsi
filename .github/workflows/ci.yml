@@ -32,11 +32,14 @@ jobs:
           deno-version: "2.1.x"
       - run: |
           node --check site.js
+          node --check aero/site.js
           node --check app/aero-core.js
           node --check app/aero-eval.js
           node --check app/aero-harness.js
           node --check app/cloud.js
           node --check app/app.js
+          node --check app/connect.js
+          node --check app/connect-suite.js
           node app/aero-core.test.js
           node app/aero-eval.test.js
           node app/aero-memory.test.js

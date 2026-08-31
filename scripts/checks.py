@@ -76,6 +76,7 @@ LINK_RE = re.compile(r"""(?:href|src)=["']([^"']+)["']""")
 def check_links() -> None:
     pages = [
         ROOT / "index.html",
+        ROOT / "aero" / "index.html",
         ROOT / "demo" / "index.html",
         ROOT / "app" / "index.html",
         ROOT / "app" / "connect.html",
@@ -88,6 +89,9 @@ def check_links() -> None:
         for url in LINK_RE.findall(html):
             if url.startswith(("http://", "https://", "mailto:", "data:", "#", "tel:")):
                 continue
+            if page == ROOT / "index.html" and url.startswith("../aero/"):
+                # Aero is intentionally published as a sibling mount to /altpsi.
+                continue
             target = url.split("#", 1)[0].split("?", 1)[0]
             if not target:
                 continue
@@ -99,7 +103,7 @@ def check_links() -> None:
 
 
 def check_brand() -> None:
-    for relative in ("assets/altpsi_logo.svg", "assets/aero_logo.svg"):
+    for relative in ("assets/altpsi_logo.svg", "assets/aero_logo.svg", "assets/connect_logo.svg"):
         path = ROOT / relative
         if not path.is_file():
             PROBLEMS.append(f"brand: {relative} is missing")
@@ -107,6 +111,27 @@ def check_brand() -> None:
         svg = path.read_text(encoding="utf-8")
         if 'viewBox="0 0 512 512"' not in svg or "<title" not in svg or "<desc" not in svg:
             PROBLEMS.append(f"brand: {relative} is not an accessible scalable mark")
+
+    expected_pngs = {
+        "assets/altpsi_logo.png": (1024, 1024),
+        "assets/aero_logo.png": (1024, 1024),
+        "assets/connect_logo.png": (1024, 1024),
+        "assets/og-altpsi.png": (1200, 630),
+        "assets/og-aero.png": (1200, 630),
+    }
+    for relative, expected_size in expected_pngs.items():
+        path = ROOT / relative
+        try:
+            payload = path.read_bytes()
+        except OSError:
+            PROBLEMS.append(f"brand: {relative} is missing")
+            continue
+        if payload[:8] != b"\x89PNG\r\n\x1a\n" or len(payload) < 24:
+            PROBLEMS.append(f"brand: {relative} is not a valid PNG")
+            continue
+        dimensions = (int.from_bytes(payload[16:20], "big"), int.from_bytes(payload[20:24], "big"))
+        if dimensions != expected_size:
+            PROBLEMS.append(f"brand: {relative} is {dimensions}, expected {expected_size}")
 
     manifest = ROOT / "site.webmanifest"
     try:
@@ -126,8 +151,38 @@ def check_indexing() -> None:
         return
     namespace = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9"}
     locations = {node.text or "" for node in tree.findall(".//s:loc", namespace)}
-    if not locations or any("/altpsi" not in location for location in locations):
-        PROBLEMS.append("indexing: temporary sitemap escaped the /altpsi boundary")
+    expected = {
+        "https://sonnesystems.com/altpsi/",
+        "https://sonnesystems.com/aero/",
+        "https://sonnesystems.com/altpsi/demo/",
+        "https://sonnesystems.com/altpsi/app/",
+    }
+    if locations != expected:
+        PROBLEMS.append("indexing: temporary sitemap does not match the two isolated product mounts")
+
+
+def check_aero_product_surface() -> None:
+    page = (ROOT / "aero" / "index.html").read_text(encoding="utf-8")
+    script = (ROOT / "aero" / "site.js").read_text(encoding="utf-8")
+    required_page_markers = {
+        "model routing": "data-model-button",
+        "change review": "data-review",
+        "private composer": "data-preview-form",
+        "typed memory": "Typed memory",
+        "visible authority": "Visible authority",
+        "communication-compression gate": "Say less over time",
+    }
+    for label, marker in required_page_markers.items():
+        if marker not in page:
+            PROBLEMS.append(f"product: Aero page is missing {label}")
+    for label, marker in {
+        "mode switching": "selectMode",
+        "review disclosure": "aria-expanded",
+        "local preview privacy": "does not send your text anywhere",
+        "reduced motion": "prefers-reduced-motion",
+    }.items():
+        if marker not in script:
+            PROBLEMS.append(f"product: Aero preview is missing {label}")
 
 
 def main() -> int:
@@ -136,6 +191,7 @@ def main() -> int:
     check_links()
     check_brand()
     check_indexing()
+    check_aero_product_surface()
     if PROBLEMS:
         print(f"FAIL: {len(PROBLEMS)} problem(s)")
         for problem in PROBLEMS:

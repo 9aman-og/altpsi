@@ -142,7 +142,7 @@
     if (type === "complete_task") return "The intended task is marked complete.";
     if (type === "memory_forget") return "The selected memory is no longer active.";
     if (type === "log_work") return "One matching work-log entry exists.";
-    return "One matching Lyfe record exists.";
+    return "One matching workspace record exists.";
   }
   function issue(code, message, phase, stepId) {
     return { code: code, message: text(message, 320), phase: phase || "preflight", stepId: text(stepId, 140), at: now() };
@@ -257,7 +257,7 @@
       var condition = postcondition(action);
       return {
         id: id("step"), index: index,
-        title: (ACTION_LABELS[action.type] || "Update Lyfe") + ": " + actionSubject(action),
+        title: (ACTION_LABELS[action.type] || "Update workspace") + ": " + actionSubject(action),
         action: action, capability: validation.ok ? capabilityFor(action) : "",
         authority: validation.ok ? "approval-required" : "denied",
         risk: validation.ok ? "low-reversible" : "unsupported", route: "local-action-engine",
@@ -297,7 +297,7 @@
       var action = canonical(source.action || {}); var validation = validateAction(action); var condition = postcondition(action);
       return {
         id: text(source.id, 140) || id("step"), index: index,
-        title: text(source.title, 260) || "Update Lyfe", action: action,
+        title: text(source.title, 260) || "Update workspace", action: action,
         capability: source.capability == null ? (validation.ok ? capabilityFor(action) : "") : text(source.capability, 120),
         authority: source.authority == null ? (validation.ok ? "approval-required" : "denied") : text(source.authority, 80),
         risk: source.risk == null ? (validation.ok ? "low-reversible" : "unsupported") : text(source.risk, 80),

@@ -1,31 +1,32 @@
-/* Lyfe service worker - offline app shell for the installed Android/PWA app.
+/* Aero service worker - offline app shell for the installed Android/PWA app.
    HTML is network-first (always fresh when online); versioned assets cache-first. */
 "use strict";
 
-const CACHE = "lyfe-aero-core-34-connect-20";
+const CACHE = "altpsi-aero-core-36-connect-22";
 const SHELL = [
   "./",
   "./index.html",
-  "./styles.css?v=aero-core-27",
+  "./styles.css?v=aero-core-29",
   "./supabase-config.js?v=aero-core-16",
-  "./cloud.js?v=aero-core-17",
+  "./cloud.js?v=aero-core-18",
   "./aero-core.js?v=aero-core-15",
-  "./aero-harness.js?v=aero-core-26",
+  "./aero-harness.js?v=aero-core-27",
   "./aero-eval.js?v=aero-core-2",
   "./aero-knowledge.js?v=aero-core-10",
-  "./app.js?v=aero-core-33",
+  "./app.js?v=aero-core-34",
   "./connect.html",
-  "./connect.css?v=connect20",
-  "./connect-suite.css?v=connect20",
-  "./connect.js?v=connect17",
-  "./connect-suite.js?v=connect20",
+  "./connect.css?v=connect22",
+  "./connect-suite.css?v=connect22",
+  "./connect.js?v=connect18",
+  "./connect-suite.js?v=connect22",
   "./connect.webmanifest",
   "./privacy.html",
-  "./legal.css?v=1",
-  "../assets/lyfe_connect_logo.png",
-  "../assets/lyfe_connect_logo.svg",
+  "./legal.css?v=2",
+  "../assets/connect_logo.png",
+  "../assets/connect_logo.svg",
+  "../assets/aero_logo.png",
   "../assets/aero_logo.svg",
-  "../assets/lyfe_logo.svg",
+  "../assets/altpsi_logo.svg",
   "./manifest.webmanifest",
   "./icon-192.png",
   "./icon-512.png",
@@ -39,7 +40,7 @@ self.addEventListener("install", (e) => {
 self.addEventListener("activate", (e) => {
   e.waitUntil(
     caches.keys()
-      .then((keys) => Promise.all(keys.filter((k) => k.startsWith("lyfe-") && k !== CACHE).map((k) => caches.delete(k))))
+      .then((keys) => Promise.all(keys.filter((k) => /^(?:lyfe|altpsi)-/.test(k) && k !== CACHE).map((k) => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });

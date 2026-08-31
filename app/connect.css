@@ -24,9 +24,9 @@
   --bridge: #eaf2fc;
   --topbar: rgba(255, 255, 255, .84);
   --mobile-bar: rgba(247, 251, 255, .94);
-  --mono: "Space Mono", ui-monospace, monospace;
-  --sans: "DM Sans", system-ui, sans-serif;
-  --display: "Unbounded", "DM Sans", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+  --sans: Inter, system-ui, sans-serif;
+  --display: Inter, system-ui, sans-serif;
 }
 
 :root[data-theme="dark"] {
@@ -802,7 +802,7 @@ textarea { resize: vertical; line-height: 1.55; }
   .connect-brand img { width: 40px; height: 40px; }
   .connect-brand-lockup, .primary-nav, .open-lyfe { display: none; }
   .top-actions { margin-left: auto; }
-  .connect-topbar::after { content: "lyfe · connect"; margin-right: auto; order: -1; padding-left: 52px; color: var(--muted); font-family: var(--display); font-size: 12px; font-weight: 600; letter-spacing: -.04em; }
+  .connect-topbar::after { content: "connect · aero"; margin-right: auto; order: -1; padding-left: 52px; color: var(--muted); font-family: var(--display); font-size: 12px; font-weight: 600; letter-spacing: -.04em; }
   .connect-brand { position: absolute; left: 9px; }
   #connect-main { width: min(100% - 28px, 760px); }
   .app-screen { padding: 54px 0 110px; }

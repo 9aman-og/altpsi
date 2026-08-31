@@ -1,4 +1,4 @@
-/* Lyfe Connect product layer: Lyfe's bright Crystal material with denser,
+/* Connect product layer: Aero's bright Crystal material with denser,
    collaboration-first information architecture. */
 :root {
   --suite-coral: #ff7168;
@@ -598,7 +598,7 @@ html[data-connect-density="compact"] .channel-message { padding-top: 8px; paddin
   .reel-motion i { animation: none; }
 }
 
-/* Lyfe Connect Y3K product system */
+/* Connect Y3K product system */
 :root {
   --connect-sans: -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, Arial, sans-serif;
   --connect-mono: "SFMono-Regular", "Cascadia Code", "Cascadia Mono", Consolas, monospace;
@@ -723,6 +723,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   .connect-topbar { width: calc(100% - 16px); }
   .primary-nav { overflow-x: auto; }
   .top-actions .icon-button { display: none; }
+}
+@media (min-width: 761px) and (max-width: 980px) {
+  .connect-brand-lockup, .top-actions .open-lyfe { display: inline-flex; }
+  .connect-topbar::after { display: none; }
 }
 @media (max-width: 760px) {
   .connect-topbar { top: 8px; min-height: 62px; border-radius: 18px; }

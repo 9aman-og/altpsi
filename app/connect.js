@@ -384,7 +384,7 @@
     return {
       id: "me",
       name: name,
-      role: state.profile.headline || "Lyfe Connect member",
+      role: state.profile.headline || "Connect member",
       city: state.profile.city || "Your network",
       initials: initials,
       color: "var(--accent)"
@@ -721,7 +721,7 @@
       root.innerHTML = [
         "<section class=\"empty-plans\"><div>",
           "<p class=\"eyebrow\">YOUR WORKSPACE IS OPEN</p><h2>Create the first useful page.</h2>",
-          "<p>A brief, research note, decision log, collaborator map, or project outline is enough. Keep the work here and send only the next action into Lyfe.</p>",
+          "<p>A brief, research note, decision log, collaborator map, or project outline is enough. Keep the work here and send only the next action into Aero.</p>",
           "<button class=\"primary-button\" type=\"button\" data-action=\"new-plan\">New page</button>",
         "</div></section>"
       ].join("");
@@ -735,7 +735,7 @@
           "<h2>", esc(plan.title), "</h2>",
           "<p>", esc(plan.note || "No note yet."), "</p>",
           "<span class=\"plan-with\">", profile ? "Collaborating with " + esc(profile.name) + " · private page" : "Personal workspace page", "</span>",
-          "<div class=\"plan-actions\"><button type=\"button\" data-action=\"edit-plan\" data-id=\"", esc(plan.id), "\">Open page</button><a href=\"", esc(lyfeUrl(plan)), "\">Send action to Lyfe ↗</a>",
+          "<div class=\"plan-actions\"><button type=\"button\" data-action=\"edit-plan\" data-id=\"", esc(plan.id), "\">Open page</button><a href=\"", esc(lyfeUrl(plan)), "\">Send action to Aero ↗</a>",
           "<button type=\"button\" data-action=\"delete-plan\" data-id=\"", esc(plan.id), "\">Remove</button></div>",
         "</article>"
       ].join("");
@@ -976,7 +976,7 @@
         renderAll();
         toast("Connect backup restored on this device.");
       } catch (error) {
-        toast("That is not a valid Lyfe Connect backup.");
+        toast("That is not a valid Connect backup.");
       }
     };
     reader.readAsText(file);
@@ -986,7 +986,7 @@
     openModal([
       modalHead("Connect settings", "Control discovery, attention, profile sharing, and local data from one place."),
       "<form class=\"modal-body connect-settings-form\" data-form=\"connect-settings\">",
-        "<section class=\"connect-settings-section\"><div><span>01</span><h3>Profile & Lyfe</h3><p>Your approved profile fields can stay consistent across both products.</p></div><div><p class=\"settings-status\"><strong>", esc(state.profile.name || "Your profile"), "</strong><span>", esc(state.profile.headline || "Add a useful headline in your profile."), "</span></p><button class=\"quiet-button\" type=\"button\" data-action=\"settings-profile\">Review profile</button></div></section>",
+        "<section class=\"connect-settings-section\"><div><span>01</span><h3>Profile & Aero</h3><p>Your approved profile fields can stay consistent across both products.</p></div><div><p class=\"settings-status\"><strong>", esc(state.profile.name || "Your profile"), "</strong><span>", esc(state.profile.headline || "Add a useful headline in your profile."), "</span></p><button class=\"quiet-button\" type=\"button\" data-action=\"settings-profile\">Review profile</button></div></section>",
         "<section class=\"connect-settings-section\"><div><span>02</span><h3>Discovery & attention</h3><p>Choose how much context and activity the interface puts in front of you.</p></div><div class=\"settings-checks\">",
           "<label class=\"settings-check\"><input type=\"checkbox\" name=\"compactFeed\" ", state.settings.compactFeed ? "checked" : "", "><span><strong>Compact work feed</strong><small>Show more posts with smaller previews.</small></span></label>",
           "<label class=\"settings-check\"><input type=\"checkbox\" name=\"showMatchReasons\" ", state.settings.showMatchReasons ? "checked" : "", "><span><strong>Show introduction reasons</strong><small>Explain why a person may be relevant instead of using a hidden score.</small></span></label>",
@@ -1016,7 +1016,7 @@
         "\" aria-pressed=\"" + (active ? "true" : "false") + "\">" + esc(spark) + "</button>";
     }).join("");
     openModal([
-      "<img class=\"onboard-mark\" src=\"../assets/lyfe_connect_logo.svg\" alt=\"\">",
+      "<img class=\"onboard-mark\" src=\"../assets/connect_logo.svg\" alt=\"\">",
       modalHead("Build a network around your work.", "Choose a few interests to shape your home feed, opportunities, and communities."),
       "<form class=\"modal-body\" data-form=\"onboarding\">",
         "<label><span>What should we call you?</span><input name=\"name\" maxlength=\"40\" autocomplete=\"name\" placeholder=\"First name\" value=\"", esc(state.profile.name), "\"></label>",
@@ -1053,7 +1053,7 @@
       modalHead("Your control stays visible.", "These preview controls act immediately on this device."),
       "<div class=\"modal-body safety-list\">",
         "<div class=\"safety-item\"><span>×</span><div><h3>Hide this sample profile</h3><p>Remove ", esc(profile.name), " from Discover on this browser.</p><div class=\"safety-links\"><button class=\"quiet-button danger-text\" type=\"button\" data-action=\"block-profile\" data-profile=\"", esc(profile.id), "\">Hide profile</button></div></div></div>",
-        "<div class=\"safety-item\"><span>!</span><div><h3>Report a problem with the preview</h3><p>Tell Sonne Systems about confusing, unsafe, or inappropriate product behaviour. This does not report a real person.</p><div class=\"safety-links\"><a class=\"quiet-button\" href=\"mailto:aman@sonnesystems.com?subject=Lyfe%20Connect%20preview%20safety%20feedback\">Email preview feedback</a></div></div></div>",
+        "<div class=\"safety-item\"><span>!</span><div><h3>Report a problem with the preview</h3><p>Tell AltPsi about confusing, unsafe, or inappropriate product behaviour. This does not report a real person.</p><div class=\"safety-links\"><a class=\"quiet-button\" href=\"mailto:aman@sonnesystems.com?subject=Connect%20preview%20safety%20feedback\">Email preview feedback</a></div></div></div>",
       "</div>"
     ].join(""));
   }
@@ -1062,7 +1062,7 @@
     openModal([
       modalHead("Safety is part of the product.", "The preview keeps control close and makes its current limits explicit."),
       "<div class=\"modal-body safety-list\">",
-        "<div class=\"safety-item\"><span>1</span><div><h3>Nothing is published or sent from this preview.</h3><p>Sample profiles, sample posts, and sample circles are fictional. Your own posts, outreach drafts, workspace pages, circle notes, and profile details stay in this browser unless you deliberately add a task to Lyfe.</p></div></div>",
+        "<div class=\"safety-item\"><span>1</span><div><h3>Nothing is published or sent from this preview.</h3><p>Sample profiles, sample posts, and sample circles are fictional. Your own posts, outreach drafts, workspace pages, circle notes, and profile details stay in this browser unless you deliberately add a task to Aero.</p></div></div>",
         "<div class=\"safety-item\"><span>2</span><div><h3>Pause, hide, and erase are always available.</h3><p>There is no penalty for taking a break. Hidden profiles stay hidden, and erasing removes your Connect data.</p></div></div>",
         "<div class=\"safety-item\"><span>3</span><div><h3>A live network needs real trust operations.</h3><p>Identity and organization checks, trained moderation, scam and spam detection, reporting operations, and appeal paths must exist before public accounts launch.</p></div></div>",
         "<div class=\"safety-item\"><span>4</span><div><h3>This is not an emergency service.</h3><p>If anyone is in immediate danger, contact the appropriate local emergency service or a trusted person nearby.</p></div></div>",
@@ -1085,7 +1085,7 @@
         "<label><span>Collaborator (optional)</span><select name=\"profileId\"><option value=\"\">Personal workspace page</option>", options, "</select></label>",
         "<label><span>Next decision or milestone</span><input name=\"when\" maxlength=\"80\" placeholder=\"Choose the public legend by Friday\" value=\"", esc(page.when), "\"></label>",
         "<label><span>Brief and working notes</span><textarea name=\"note\" rows=\"7\" maxlength=\"1200\" placeholder=\"Problem, current evidence, open questions, and the next useful action\">", esc(page.note), "</textarea></label>",
-        "<p class=\"form-note\">Only the page title and note are offered to Lyfe when you choose “Add to Lyfe”.</p>",
+        "<p class=\"form-note\">Only the page title and note are offered to Aero when you choose “Add to Aero”.</p>",
         "<div class=\"modal-actions\"><button class=\"quiet-button\" type=\"button\" data-action=\"modal-close\">Cancel</button><button class=\"primary-button\" type=\"submit\">", page.id ? "Save changes" : "Create page", "</button></div>",
       "</form>"
     ].join(""), true);
@@ -1588,7 +1588,7 @@
       var syncedToLyfe = syncProfileToLyfe();
       renderNotificationCount();
       renderProfilePreview();
-      document.getElementById("profile-save-note").textContent = syncedToLyfe ? "Saved just now · approved fields synced to Lyfe." : "Saved just now · only on this device.";
+      document.getElementById("profile-save-note").textContent = syncedToLyfe ? "Saved just now · approved fields synced to Aero." : "Saved just now · only on this device.";
       toast("Profile saved privately.");
     }
   });

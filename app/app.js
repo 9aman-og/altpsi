@@ -445,14 +445,7 @@ function defaultData() {
   };
 }
 
-function firstRunData() {
-  const d = defaultData();
-  const now = Date.now();
-  d.notes.push({
-    id: uid(),
-    title: "Welcome to Lyfe",
-    body:
-`Lyfe keeps what matters close, and Aero helps you find your next step.
+const AERO_WELCOME_NOTE = `Your Aero workspace keeps what matters close and turns context into a clear next move.
 
 THE SHORT TOUR
 
@@ -464,14 +457,22 @@ Profile - your identity, learning, and the details you choose to share with Conn
 
 GOOD TO KNOW
 
-You can use Lyfe privately on this device or sign in to sync it. Gmail connects only when you choose it, and messages enter your Library only when you save them.
-Aero can use Today, Tracking, Library, Connect, Gmail metadata and Profile only when you enable those sources. Its memory is typed, visible and yours to forget.`,
+You can use Aero privately on this device or sign in to sync your workspace. Gmail connects only when you choose it, and messages enter your Library only when you save them.
+Aero can use Today, Tracking, Library, Connect, Gmail metadata and Profile only when you enable those sources. Its memory is typed, visible and yours to forget.`;
+
+function firstRunData() {
+  const d = defaultData();
+  const now = Date.now();
+  d.notes.push({
+    id: uid(),
+    title: "Welcome to Aero",
+    body: AERO_WELCOME_NOTE,
     pinned: true,
     createdAt: now,
     updatedAt: now,
   });
   d.chat.push(
-    { id: uid(), threadId: d.aeroActiveThreadId, role: "sol", text: "I’m Aero. I use the Lyfe context you allow and preview every change.", ts: now },
+    { id: uid(), threadId: d.aeroActiveThreadId, role: "sol", text: "I’m Aero. I use the workspace context you allow and preview every change.", ts: now },
     { id: uid(), threadId: d.aeroActiveThreadId, role: "sol", text: "Ask what matters now, or show me a workflow you repeat.", ts: now + 1 },
   );
   return d;
@@ -488,7 +489,8 @@ function migrateLegacyCompanionText(value) {
     .replace(/\b(?:sol|eos)\b/g, "aero");
   const legacyIntro = {
     "hey, i'm aero.": "I’m Aero.",
-    "i carry the Lyfe context you allow, remember only what earns persistence, and preview every workspace change.": "I use the Lyfe context you allow and preview changes before they happen.",
+    "i carry the Lyfe context you allow, remember only what earns persistence, and preview every workspace change.": "I use the workspace context you allow and preview changes before they happen.",
+    "i use the Lyfe context you allow and preview every change.": "I use the workspace context you allow and preview every change.",
     "start with \"what actually matters?\" or teach me a workflow you want to shorten over time.": "Ask what matters now, or show me a workflow you repeat.",
   };
   return legacyIntro[migrated] || migrated;
@@ -545,12 +547,10 @@ function normalize(raw) {
     : [];
   base.notes = base.notes.map(note => {
     const body = String(note.body || "");
-    const isOriginalWelcome = note.title === "Welcome to Lyfe" && note.pinned === true
-      && /Lyfe keeps (?:everything in one calm place|what matters close)/i.test(body)
-      && /\b(?:sol|eos)\b/i.test(body);
+    const isOriginalWelcome = ["Welcome to Lyfe", "Welcome to Aero"].includes(note.title) && note.pinned === true
+      && /(?:Lyfe keeps (?:everything in one calm place|what matters close)|Your Aero workspace keeps what matters close)/i.test(body);
     if (!isOriginalWelcome) return note;
-    const migratedBody = migrateLegacyCompanionText(body);
-    return migratedBody === body ? note : Object.assign({}, note, { body: migratedBody });
+    return Object.assign({}, note, { title: "Welcome to Aero", body: AERO_WELCOME_NOTE });
   });
   if (raw.settings && typeof raw.settings === "object") {
     base.settings = Object.assign(base.settings, raw.settings);
@@ -1391,7 +1391,7 @@ function viewTodayLegacy() {
 
   const connectActivity = connectSummary();
   const connectInbox = `<a class="connect-inbox-card" href="connect.html#notifications">
-    <span class="connect-inbox-icon"><img src="../assets/lyfe_connect_logo.svg" alt=""></span>
+    <span class="connect-inbox-icon"><img src="../assets/connect_logo.svg" alt=""></span>
     <span class="connect-inbox-copy"><span class="eyebrow">CONNECT NOTIFICATIONS</span><strong>${connectActivity.unread ? connectActivity.unread + " unread update" + (connectActivity.unread === 1 ? "" : "s") : "Your Connect inbox is quiet."}</strong><small>${esc(connectActivity.latest)}</small></span>
     <span class="connect-inbox-meta"><b>${connectActivity.threads}</b> drafts · <b>${connectActivity.saved}</b> saved</span>
   </a>`;
@@ -1437,12 +1437,12 @@ function viewTodayLegacy() {
   const aeroHomeThought = overdue.length
     ? "One thing slipped. Pick it up or give it a new date."
     : "Nothing is urgent. Use the space well.";
-  const aeroHomeBody = `<div class="aero-home-lockup"><img src="../assets/aero_logo.svg" alt=""><span><small>AERO</small><b>Ready with your Lyfe context</b></span></div>
+  const aeroHomeBody = `<div class="aero-home-lockup"><img src="../assets/aero_logo.svg" alt=""><span><small>AERO</small><b>Ready with your workspace context</b></span></div>
     <h2>${aeroHomeThought}</h2>
     <div class="aero-home-prompts" aria-label="Ask Aero">
       <button type="button" data-action="aero-from-source" data-source="today" data-prompt="what actually matters right now?">what matters?</button>
       <button type="button" data-action="aero-from-source" data-source="today" data-prompt="plan my next focused hour">plan an hour</button>
-      <button type="button" data-action="aero-from-source" data-source="today" data-prompt="what changed across my Lyfe?">what changed?</button>
+      <button type="button" data-action="aero-from-source" data-source="today" data-prompt="what changed across my workspace?">what changed?</button>
     </div>
     <button class="btn" data-action="nav" data-view="sol">Open Aero</button>`;
 
@@ -1453,7 +1453,7 @@ function viewTodayLegacy() {
     return `<div class="cx-stage">
     <section class="cx-hero" data-reveal>
       <div class="cx-hero-copy">
-        <div class="cx-kicker home-index">LYFE ::CRYSTAL • ${esc(fmtLongISO(t))}</div>
+        <div class="cx-kicker home-index">AERO ::CRYSTAL • ${esc(fmtLongISO(t))}</div>
         <h1 class="cx-title">Good ${partCap},<br>${esc(who)}<span class="blink-dot">.</span></h1>
         <p class="cx-deck">${open.length
           ? `<b>${open.length} open loop${open.length === 1 ? "" : "s"}</b> in orbit - everything else is handled.`
@@ -1539,8 +1539,8 @@ function viewTodayLegacy() {
       </section>
 
       <a class="cx-connect-card" href="connect.html">
-        <span class="cx-connect-mark"><img src="../assets/lyfe_connect_logo.svg" alt=""></span>
-        <span class="cx-connect-copy"><span class="eyebrow">LYFE CONNECT / PRIVATE PREVIEW</span><strong>Find the people and rooms your work needs.</strong><span>A calmer network for collaborators, work posts, focused Circles, and shared project pages.</span></span>
+        <span class="cx-connect-mark"><img src="../assets/connect_logo.svg" alt=""></span>
+        <span class="cx-connect-copy"><span class="eyebrow">CONNECT / SHARED WORK</span><strong>Find the people and rooms your work needs.</strong><span>A focused network for collaborators, work posts, Circles, and shared project pages.</span></span>
         <span class="cx-connect-link">OPEN CONNECT <span aria-hidden="true">↗</span></span>
       </a>
       ${connectInbox}
@@ -1560,7 +1560,7 @@ function viewTodayLegacy() {
   // ORBIT (dark): the cinematic control room, unchanged.
   return `<div class="home-stage">
     <section class="home-intro">
-      <div class="home-index">LYFE / ${String(new Date().getMonth() + 1).padStart(2, "0")}.${String(new Date().getDate()).padStart(2, "0")}</div>
+      <div class="home-index">AERO / ${String(new Date().getMonth() + 1).padStart(2, "0")}.${String(new Date().getDate()).padStart(2, "0")}</div>
       <div class="home-title-row">
         <h1>Good ${partCap}, ${esc(who)}<span class="blink-dot">.</span></h1>
         <div class="home-actions">
@@ -1588,7 +1588,7 @@ function viewTodayLegacy() {
         ${aeroBrandMark(42, "aero-home-status")}
         <span class="sol-chip-txt">
           <span class="sol-chip-main">AERO</span>
-          <span class="sol-chip-sub">tap to use your Lyfe context</span>
+          <span class="sol-chip-sub">tap to use your workspace context</span>
         </span>
       </button>
       <div class="orbit-dock">
@@ -1652,8 +1652,8 @@ function viewTodayLegacy() {
           ${aeroHomeBody}
         </section>
         <a class="panel tilt connect-card" href="connect.html">
-          <span class="connect-card-mark"><img src="../assets/lyfe_connect_logo.svg" alt=""></span>
-          <span class="eyebrow">LYFE CONNECT / PRIVATE PREVIEW</span>
+          <span class="connect-card-mark"><img src="../assets/connect_logo.svg" alt=""></span>
+          <span class="eyebrow">CONNECT / SHARED WORK</span>
           <strong>Find the people and rooms your work needs.</strong>
           <span>Discover collaborators, share work in context, and turn a useful thread into organized action.</span>
           <span class="btn">open connect <span aria-hidden="true">↗</span></span>
@@ -1751,7 +1751,7 @@ function viewTodayAttentionDashboard() {
   return `<div class="today-system">
     <section class="today-hero" aria-labelledby="today-title">
       <div class="today-topline">
-        <span>LYFE / ${esc(fmtLongISO(today))}</span>
+        <span>AERO / ${esc(fmtLongISO(today))}</span>
         <span class="today-live"><i></i> AERO CONTEXT READY</span>
       </div>
 
@@ -1770,7 +1770,7 @@ function viewTodayAttentionDashboard() {
         <aside class="today-aero-presence" aria-label="Aero context status">
           <div class="today-aero-lockup">
             <span class="today-logo"><img src="../assets/aero_logo.svg" alt="Aero"></span>
-            <span><b>Aero</b><small>across Lyfe</small></span>
+            <span><b>Aero</b><small>across your workspace</small></span>
           </div>
           <p>${sourceLabels.length} connected context ${sourceLabels.length === 1 ? "source" : "sources"} are available for this brief.</p>
           <div class="today-source-chips">${sourceLabels.map(label => `<span>${esc(label)}</span>`).join("")}</div>
@@ -1804,7 +1804,7 @@ function viewTodayAttentionDashboard() {
       <section class="panel today-aero-actions">
         <span class="eyebrow">02 / ASK WITH CONTEXT</span>
         <h2>Say the short version.</h2>
-        <p>Aero already has the Lyfe surfaces you allowed. Start with the outcome, not the backstory.</p>
+        <p>Aero already has the workspace sources you allowed. Start with the outcome, not the backstory.</p>
         <div class="today-prompt-list">
           <button type="button" data-action="aero-from-source" data-source="today" data-prompt="plan my next focused block">Plan my next block <span>→</span></button>
           <button type="button" data-action="aero-from-source" data-source="today" data-prompt="catch me up on what changed">Catch me up <span>→</span></button>
@@ -1830,7 +1830,7 @@ function viewTodayAttentionDashboard() {
         <div>${noteList}</div>
       </section>
       <a class="panel today-connect-module" href="connect.html">
-        <div class="today-connect-head"><img src="../assets/lyfe_connect_logo.svg" alt=""><span class="eyebrow">LYFE CONNECT</span></div>
+        <div class="today-connect-head"><img src="../assets/connect_logo.svg" alt=""><span class="eyebrow">CONNECT</span></div>
         <h2>People are part of the work.</h2>
         <p>${connectActivity.unread ? esc(connectActivity.latest) : "Conversations, collaborators and saved opportunities become usable Aero context."}</p>
         <div class="today-connect-stats"><span><b>${connectActivity.unread}</b> unread</span><span><b>${connectActivity.threads}</b> threads</span><span><b>${connectActivity.saved}</b> saved</span></div>
@@ -1980,7 +1980,7 @@ function aeroContextPack(surfaceOverride, query) {
 
 function aeroSourceLabel(id) {
   const labels = { today: "Today", tracking: "Tracking", library: "Library", connect: "Connect", gmail: "Gmail", profile: "Profile", knowledge: "Knowledge vault" };
-  return labels[id] || String(id || "Lyfe");
+  return labels[id] || String(id || "Workspace");
 }
 
 function syncProfileToConnect() {
@@ -2002,7 +2002,7 @@ function syncProfileToConnect() {
     localStorage.setItem("lyfe.connect.preview.v1", JSON.stringify(connect));
     connectUiDigest = connectDigest();
   } catch (e) {
-    toast("Profile saved in Lyfe, but Connect could not be updated on this device");
+    toast("Profile saved in Aero, but Connect could not be updated on this device");
   }
 }
 
@@ -2019,11 +2019,11 @@ function viewProfile() {
     [(state.data.game && state.data.game.streak) || 0, "day streak"],
   ];
 
-  return pageHead("Profile", `<a class="btn" href="connect.html#profile">Open in Connect ↗</a>`, "you, across Lyfe") + `
+  return pageHead("Profile", `<a class="btn" href="connect.html#profile">Open in Connect ↗</a>`, "you, across Aero") + `
     <section class="profile-hero panel">
       <div class="profile-avatar" aria-hidden="true"><span>${esc(initials)}</span></div>
       <div class="profile-identity">
-        <span class="eyebrow">LYFE PROFILE</span>
+        <span class="eyebrow">AERO PROFILE</span>
         <h2>${esc(name)}</h2>
         <p>${esc(s.headline || "Add a short line about what you are working toward.")}</p>
         <div class="profile-tags">${interests.length ? interests.map(tag => `<span>${esc(tag)}</span>`).join("") : `<span>add your interests below</span>`}</div>
@@ -2044,13 +2044,13 @@ function viewProfile() {
           <label class="profile-field-wide"><span>About you</span><textarea name="bio" rows="5" maxlength="500" placeholder="Write like a person. Share what you care about, what you are working on, and where someone could help.">${esc(s.bio)}</textarea></label>
           <label class="profile-field-wide"><span>Interests, separated by commas</span><input name="interests" maxlength="240" value="${esc(interests.join(", "))}" placeholder="Design, research, open source"></label>
         </div>
-        <label class="profile-sync"><input type="checkbox" name="connectSync" value="yes" ${s.connectSync ? "checked" : ""}><span><b>Use in Lyfe Connect</b><small>Private Lyfe data stays separate.</small></span></label>
+        <label class="profile-sync"><input type="checkbox" name="connectSync" value="yes" ${s.connectSync ? "checked" : ""}><span><b>Use in Connect</b><small>Your private workspace stays separate.</small></span></label>
         <div class="profile-form-actions"><span>Private by default.</span><button class="btn btn-primary" type="submit">Save profile</button></div>
       </form>
 
       <aside class="panel profile-connect-card">
-        <img src="../assets/lyfe_connect_logo.svg" alt="">
-        <span class="eyebrow">LYFE CONNECT</span>
+        <img src="../assets/connect_logo.svg" alt="">
+        <span class="eyebrow">CONNECT</span>
         <h2>One profile. Clear boundaries.</h2>
         <p>Your public identity can travel. Your private workspace does not.</p>
         <div class="profile-connect-stats"><span><b>${connect.saved}</b> saved people</span><span><b>${connect.threads}</b> private drafts</span></div>
@@ -2824,7 +2824,7 @@ function aeroServerReviewHtml(message, prepared, kind) {
       const detail = step.type === "memory_upsert" ? aeroActionDetail({ type: step.type, claim: step.subject })
         : step.type === "memory_forget" ? aeroActionDetail({ type: step.type, query: step.subject })
           : step.subject || "Bound change";
-      return `<article><span>${String(index + 1).padStart(2, "0")}</span><p>${esc(detail)}<small>${esc(step.acceptance || "One matching Lyfe record exists.")}</small></p></article>`;
+      return `<article><span>${String(index + 1).padStart(2, "0")}</span><p>${esc(detail)}<small>${esc(step.acceptance || "One matching workspace record exists.")}</small></p></article>`;
     }).join("")}</div>
     <div class="aero-review-footer"><strong>${count} ${count === 1 ? "change" : "changes"}, all or nothing</strong><div><button type="button" class="btn" data-action="aero-cancel" data-id="${esc(message.id)}">Not now</button><button type="button" class="btn btn-primary" data-action="aero-apply" data-id="${esc(message.id)}">${presence ? "Verify & apply" : "Apply exact plan"}</button></div></div>`;
 }
@@ -2847,7 +2847,7 @@ async function aeroReviewProposalModal(message) {
   }
   openModal(
     `<div class="aero-review-head"><div class="aero-review-brand"><img src="../assets/aero_logo.svg" alt=""><span>AERO</span></div><h3>Securing this plan</h3></div>
-     <div class="aero-review-runtime"><span>Checking the current ${serverKind === "memory" ? "memory" : "Lyfe"} revision</span><b>Binding exact changes</b><b>No change yet</b></div>
+     <div class="aero-review-runtime"><span>Checking the current ${serverKind === "memory" ? "memory" : "workspace"} revision</span><b>Binding exact changes</b><b>No change yet</b></div>
      <div class="aero-review-footer"><strong>Preparing review</strong><button type="button" class="btn" data-action="modal-close">Close</button></div>`,
     "aero-review-modal"
   );
@@ -2861,7 +2861,7 @@ async function aeroReviewProposalModal(message) {
       });
     } else {
       const flushed = await LyfeCloud.flush(state.data, state.data.rev);
-      if (flushed === false) throw Object.assign(new Error("Lyfe changed in another signed-in session. Open the plan again."), { code: "state_changed" });
+      if (flushed === false) throw Object.assign(new Error("Your workspace changed in another signed-in session. Open the plan again."), { code: "state_changed" });
       const requestKey = (`aero-${message.id}-r${state.data.rev}`).slice(0, 160);
       const messageIndex = state.data.chat.findIndex(item => item.id === message.id);
       const userIntent = state.data.chat.slice(0, messageIndex).reverse().find(item => item.role === "user");
@@ -3041,7 +3041,7 @@ async function applyServerAeroProposal(messageId) {
       } catch (_) { /* a later focus or realtime event will recover */ }
     }
     render();
-    toast(error && error.message ? error.message : "Aero stopped before changing Lyfe");
+    toast(error && error.message ? error.message : "Aero stopped before changing your workspace");
   }
 }
 
@@ -3367,7 +3367,7 @@ function postconditionForAeroAction(action) {
   if (action && action.type === "complete_task") return "The intended task is marked complete.";
   if (action && action.type === "memory_forget") return "The selected memory is no longer active.";
   if (action && action.type === "log_work") return "One matching work-log entry exists.";
-  return "One matching Lyfe record exists.";
+  return "One matching workspace record exists.";
 }
 
 function applyAeroActionStep(action) {
@@ -3538,7 +3538,7 @@ function solLocal(raw) {
   if (/what can you do|^help$|how do (you|i) work/.test(low)) {
     return {
       bubbles: [
-        "I work across the Lyfe context you allow: Today, Tracking, Library, Connect, Gmail, and your knowledge vault.",
+        "I work across the context you allow: Today, Tracking, Library, Connect, Gmail, and your knowledge vault.",
         "Ask what matters, compare something, plan a follow-up, or tell me what to remember. I preview workspace changes first.",
         "The goal is simple: you should need fewer words over time without losing accuracy.",
       ],
@@ -3724,13 +3724,13 @@ function solLocal(raw) {
   };
 }
 
-const SOL_SYSTEM = `You are Aero, the personal operating layer inside Lyfe. Turn the user's intended outcome into a clear answer, an inspectable plan, or a reviewable Lyfe change. Use only the permitted context and cite the source by name when imported ChatGPT, Gemini, Gmail, Connect, or Library context materially shaped the answer. Never claim to have opened, remembered, connected, or changed something when the supplied context does not prove it.
+const SOL_SYSTEM = `You are Aero, an adaptive personal-intelligence layer by AltPsi. Turn the user's intended outcome into a clear answer, an inspectable plan, or a reviewable workspace change. Use only the permitted context and cite the source by name when imported ChatGPT, Gemini, Gmail, Connect, or Library context materially shaped the answer. Never claim to have opened, remembered, connected, or changed something when the supplied context does not prove it.
 
 Voice: calm, sharp, and human. Lead with the answer. Use plain language, natural capitalization, and the fewest words that preserve meaning. No corporate assistant phrases, therapy clichés, guilt, forced cheerfulness, fake intimacy, emojis as decoration, or research terminology in ordinary conversation. Do not say “protect that feeling”, “connect a brain”, “you've got this”, or “memory that earns persistence”. Ask one precise clarification only when it changes the result.
 
 Answer general questions when the active engine has enough knowledge. Say plainly when live information or a source is unavailable. Do not invent current facts, account connections, memory, citations, or completed work.
 
-You can propose reversible changes inside Lyfe. When the conversation calls for it, end your reply with a fenced json block containing an array of actions. The user will see a preview and must approve it:
+You can propose reversible changes inside the workspace. When the conversation calls for it, end your reply with a fenced json block containing an array of actions. The user will see a preview and must approve it:
 
 \`\`\`json
 [{"type":"add_task","title":"email prof","due":"2026-07-04","priority":"Medium","area":"Work"}]
@@ -3753,7 +3753,7 @@ Rules: only include the block when there is genuinely something to change. Say t
 Example of a perfect reply:
 User: "remind me to call the bank tomorrow, also im so tired lately"
 Aero:
-I’ve prepared the bank call for tomorrow. Review it before it changes Lyfe.
+I’ve prepared the bank call for tomorrow. Review it before it changes your workspace.
 
 You also mentioned feeling tired lately. Want me to make today’s plan lighter?
 
@@ -4342,7 +4342,7 @@ function accountRowHtml() {
 function aeroPresenceSettingsHtml() {
   const signedIn = !!(CLOUD_MODE && window.LyfeCloud && LyfeCloud.user);
   if (!signedIn) {
-    return `<div class="settings-integration-row"><span class="acct-dot"></span><div><b>Sign in to protect approvals</b><small>Device verification belongs to one private Lyfe account.</small></div></div>`;
+    return `<div class="settings-integration-row"><span class="acct-dot"></span><div><b>Sign in to protect approvals</b><small>Device verification belongs to one private Aero account.</small></div></div>`;
   }
   if (!(window.LyfeCloud && LyfeCloud.aeroPresenceEnabled)) {
     return `<div class="settings-integration-row"><span class="acct-dot"></span><div><b>Secure approvals unavailable</b><small>This deployment has not enabled transaction-bound device verification.</small></div></div>`;
@@ -4393,10 +4393,10 @@ function settingsModal() {
   const groqReady = !!(window.LyfeCloud && LyfeCloud.configured && LyfeCloud.aeroGatewayEnabled && LyfeCloud.user);
   const sourceToggle = (id, title, detail) => `<label class="aero-source-toggle"><input type="checkbox" name="source_${id}" ${sources[id] === false ? "" : "checked"}><span><b>${esc(title)}</b><small>${esc(detail)}</small></span></label>`;
   openModal(
-    `<div class="settings-hero"><div><span class="settings-kicker">LYFE · AERO</span><h3>Settings</h3><p>Account, context, models, and privacy.</p></div><img src="../assets/aero_logo.svg" alt=""></div>
+    `<div class="settings-hero"><div><span class="settings-kicker">AERO · ALTPSI</span><h3>Settings</h3><p>Account, context, models, and privacy.</p></div><img src="../assets/aero_logo.svg" alt=""></div>
      <form data-form="settings" class="settings-form">
        <section class="settings-section settings-account">
-         <div class="settings-section-copy"><span>01</span><div><h4>Account</h4><p>Your Lyfe identity and sync.</p></div></div>
+         <div class="settings-section-copy"><span>01</span><div><h4>Account</h4><p>Your Aero identity and sync.</p></div></div>
          <div>${accountRowHtml()}<a class="settings-inline-link" href="connect.html#profile">Open Connect profile →</a></div>
        </section>
        <section class="settings-section">
@@ -4443,7 +4443,7 @@ function settingsModal() {
          <div class="settings-section-copy"><span>07</span><div><h4>Model routing</h4><p>Aero chooses an engine; Aero remains the system.</p></div></div>
          <div class="settings-stack">
            ${fld("Routing mode", selectHtml("provider", [["auto", "Automatic · local first"], ["ollama", "Ollama only"], ["groq", "Groq for cloud-safe prompts"], ["offline", "Built-in tools only"]], ["auto", "ollama", "groq", "offline"].includes(s.provider) ? s.provider : "auto"))}
-           <label class="settings-check"><input type="checkbox" name="aeroCloudEnabled" ${s.aeroCloudEnabled ? "checked" : ""}><span><b>Use free Groq for cloud-safe prompts</b><small>Sends only the current prompt. Lyfe context stays local. If free capacity runs out, Aero falls back locally instead of charging.</small></span></label>
+           <label class="settings-check"><input type="checkbox" name="aeroCloudEnabled" ${s.aeroCloudEnabled ? "checked" : ""}><span><b>Use Groq for cloud-safe prompts</b><small>Sends only the current prompt. Workspace context stays local. If free capacity runs out, Aero falls back locally instead of charging.</small></span></label>
            <div class="fld-row">
              ${fld("Ollama address", `<input type="text" name="ollamaUrl" value="${esc(s.ollamaUrl || "http://localhost:11434")}" placeholder="http://localhost:11434">`)}
              ${fld("Ollama model", `<input type="text" name="ollamaModel" value="${esc(s.ollamaModel || "qwen3:8b")}" placeholder="qwen3:8b">`)}
@@ -4458,8 +4458,8 @@ function settingsModal() {
            <div><div class="fld-row">${fld("Your name", `<input type="text" name="name" maxlength="60" value="${esc(s.name || "")}" placeholder="How Aero greets you">`)}${fld("Appearance", selectHtml("theme", [["auto", "Follow the time"], ["light", "Pearl light"], ["dark", "Graphite dark"]], s.theme === "day" ? "light" : s.theme === "night" ? "dark" : (["auto", "light", "dark"].includes(s.theme) ? s.theme : "auto")))}${fld("Aero reaches out", selectHtml("aeroProactiveMode", [["brief", "One useful check-in a day"], ["important", "Urgent only"], ["quiet", "Updates panel only"], ["off", "Never"]], ["brief", "important", "quiet", "off"].includes(s.aeroProactiveMode) ? s.aeroProactiveMode : "brief"))}${fld("Interface sounds", selectHtml("sound", [["on", "On"], ["off", "Off"]], s.sound === false ? "off" : "on"))}</div><div class="fld-row">${fld("Age (optional)", `<input type="number" name="age" min="1" max="120" value="${esc(s.age || "")}" placeholder="Only if useful to you">`)}${fld("Country (optional)", `<input type="text" name="country" maxlength="56" value="${esc(s.country || "")}" placeholder="Used for your profile">`)}</div><p class="fld-note">Routine work stays in Updates. Aero can start one conversation a day; only an urgent item may add a second.</p></div>
        </section>
        <section class="settings-section settings-data">
-         <div class="settings-section-copy"><span>09</span><div><h4>Backups</h4><p>Download or restore Lyfe data.</p></div></div>
-         <div><p class="settings-data-note">${CLOUD_MODE ? "Your account is synced and also cached on this device for offline use." : "You are using Lyfe on this device. A backup is the easiest way to move or protect it."}</p><div class="settings-data-actions"><button type="button" class="btn" data-action="export">Download backup</button><button type="button" class="btn" data-action="import">Restore backup</button></div></div>
+         <div class="settings-section-copy"><span>09</span><div><h4>Backups</h4><p>Download or restore Aero data.</p></div></div>
+         <div><p class="settings-data-note">${CLOUD_MODE ? "Your account is synced and also cached on this device for offline use." : "You are using Aero on this device. A backup is the easiest way to move or protect it."}</p><div class="settings-data-actions"><button type="button" class="btn" data-action="export">Download backup</button><button type="button" class="btn" data-action="import">Restore backup</button></div></div>
        </section>
        ${modalActions("Save settings")}
      </form>`,
@@ -4485,7 +4485,7 @@ function doExport() {
   const blob = new Blob([JSON.stringify(state.data, null, 2)], { type: "application/json" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
-  a.download = "lyfe-backup-" + todayStr() + ".json";
+  a.download = "aero-backup-" + todayStr() + ".json";
   document.body.appendChild(a);
   a.click();
   a.remove();
@@ -4503,11 +4503,11 @@ function handleImportFile(input) {
     try { obj = JSON.parse(String(reader.result)); } catch (e) { /* handled below */ }
     const keys = ["tasks", "projects", "goals", "education", "worklog", "notes", "docs", "saved", "chat"];
     if (!obj || typeof obj !== "object" || !keys.some(k => Array.isArray(obj[k]))) {
-      toast("That's not a Lyfe backup file");
+      toast("That's not an Aero backup file");
       return;
     }
     confirmDialog(
-      "Importing will replace everything currently in Lyfe with the contents of this file.",
+      "Importing will replace everything currently in Aero with the contents of this file.",
       () => {
         state.data = normalize(obj);
         state.noteId = null;
@@ -4564,11 +4564,11 @@ window.addEventListener("scroll", () => {
 }, { passive: true });
 
 /* Compact product lockup. The page list below carries navigation; the brand
-   mark should identify Lyfe rather than becoming another navigation puzzle. */
+   mark should identify Aero rather than becoming another navigation puzzle. */
 function sunNav() {
   const activeLabel = (VIEWS.find(v => v.id === topSectionOf(state.view)) || VIEWS[0]).label;
   return `<div class="sunnav product-nav-brand">
-    <button type="button" data-action="nav" data-view="today" aria-label="Open Lyfe Today"><img src="../assets/lyfe_logo.svg" alt=""><span><b>Lyfe</b><small>Personal system</small></span></button>
+    <button type="button" data-action="nav" data-view="today" aria-label="Open Aero Today"><img src="../assets/aero_logo.svg" alt=""><span><b>Aero</b><small>by AltPsi</small></span></button>
     <span id="sunnav-label">${esc(activeLabel)}</span>
   </div>`;
 }
@@ -4589,8 +4589,8 @@ function hudHtml() {
 function renderNav() {
   const openCt = state.data.tasks.filter(x => x.status !== "done").length;
   const connectActivity = connectSummary();
-  const connectNav = `<a class="nav-item nav-connect" href="connect.html" aria-label="Open Lyfe Connect">
-    <span class="nav-connect-mark"><img src="../assets/lyfe_connect_logo.svg" alt=""></span>
+  const connectNav = `<a class="nav-item nav-connect" href="connect.html" aria-label="Open Connect">
+    <span class="nav-connect-mark"><img src="../assets/connect_logo.svg" alt=""></span>
     <span>Connect</span>
     ${connectActivity.unread ? `<span class="nav-count">${connectActivity.unread}</span>` : `<span class="nav-connect-pulse" aria-hidden="true"></span>`}
   </a>`;
@@ -5099,7 +5099,7 @@ document.addEventListener("click", (e) => {
       d.notes.unshift({
         id: uid(),
         title: `${place[0]}, ${place[1]}`,
-        body: `${place[2]}\n\nA place Lyfe showed me in Wander.`,
+        body: `${place[2]}\n\nA place Aero showed me in Wander.`,
         pinned: false,
         createdAt: now,
         updatedAt: now,
@@ -5400,7 +5400,7 @@ document.addEventListener("click", (e) => {
     case "aero-teach": aeroTeachModal(); break;
     case "aero-training-export": exportAeroTrainingExamples(); break;
     case "aero-forget":
-      confirmDialog("Forget this Aero memory and its retained snapshots? The underlying Lyfe item, if any, is not deleted.", async () => {
+      confirmDialog("Forget this Aero memory and its retained snapshots? The underlying workspace item, if any, is not deleted.", async () => {
         if (CLOUD_MODE && window.LyfeCloud && LyfeCloud.aeroMemoryEnabled) {
           await commitDirectAeroMemory(
             [{ type: "forget", query: id }],
@@ -5433,7 +5433,7 @@ document.addEventListener("click", (e) => {
       break;
     }
     case "aero-clear-knowledge":
-      confirmDialog("Clear imported ChatGPT, Gemini, and file context from this device? Lyfe data and Aero memory stay intact.", async () => {
+      confirmDialog("Clear imported ChatGPT, Gemini, and file context from this device? Workspace data and Aero memory stay intact.", async () => {
         if (window.AeroKnowledge) await AeroKnowledge.clear();
         closeModal(); settingsModal(); render(); toast("Knowledge vault cleared");
       }, "Clear vault");
@@ -5838,7 +5838,7 @@ document.addEventListener("submit", (e) => {
       save();
       syncProfileToConnect();
       render();
-      toast(d.settings.connectSync ? "Profile saved and synced to Connect" : "Profile saved in Lyfe");
+      toast(d.settings.connectSync ? "Profile saved and synced to Connect" : "Profile saved in Aero");
       break;
     }
 
@@ -6168,7 +6168,7 @@ function maybeOfferConnectPlan() {
   try { history.replaceState(null, "", location.pathname + location.hash); } catch (e) {}
   setTimeout(() => {
     confirmDialog(
-      "Add \"" + title + "\" to your Lyfe tasks? Only this title and the note you approved in Connect will be copied.",
+      "Add \"" + title + "\" to your Aero tasks? Only this title and the note you approved in Connect will be copied.",
       () => {
         state.data.tasks.push({
           id: uid(),
@@ -6187,7 +6187,7 @@ function maybeOfferConnectPlan() {
         });
         save();
         setView("tasks");
-        toast("Connect plan added to Lyfe");
+        toast("Connect plan added to Aero");
       },
       "Add plan"
     );
@@ -6302,7 +6302,7 @@ const COMMON_COUNTRIES = [
 ];
 
 function lyfeAuthMark() {
-  return `<span class="auth-mark" aria-hidden="true"><img src="../assets/lyfe_logo.svg" alt=""></span>`;
+  return `<span class="auth-mark" aria-hidden="true"><img src="../assets/aero_logo.svg" alt=""></span>`;
 }
 
 function showOnboarding() {
@@ -6313,17 +6313,17 @@ function showOnboarding() {
   el.innerHTML =
     `<div class="onb-shell">
       <aside class="onb-story">
-        <div class="onb-brand"><img src="../assets/lyfe_logo.svg" alt=""><span>Lyfe</span></div>
+        <div class="onb-brand"><img src="../assets/altpsi_logo.svg" alt=""><span>AltPsi / Aero</span></div>
         <div class="onb-story-main">
           <span class="onb-kicker">YOUR SPACE, YOUR DEFAULTS</span>
           <h2>Start with what matters.</h2>
-          <p>Give Lyfe a little direction now. Aero can make the rest feel lighter from day one.</p>
+          <p>Give Aero a little direction now. It can make the rest feel lighter from day one.</p>
           <div class="onb-story-points">
-            <div><b>01</b><span><strong>Personal from the start</strong><small>Your priorities shape what Lyfe surfaces.</small></span></div>
+            <div><b>01</b><span><strong>Personal from the start</strong><small>Your priorities shape what Aero surfaces.</small></span></div>
             <div><b>02</b><span><strong>Always adjustable</strong><small>Change any answer later in Settings.</small></span></div>
           </div>
         </div>
-        <p class="onb-privacy">Private to your Lyfe account.</p>
+        <p class="onb-privacy">Private to your Aero account.</p>
       </aside>
       <section class="onb-card" aria-labelledby="onb-title">
         <div class="onb-head">
@@ -6331,7 +6331,7 @@ function showOnboarding() {
             ${lyfeAuthMark()}
             <span class="onb-step">ONE-TIME SETUP</span>
           </div>
-          <h1 class="onb-title" id="onb-title">Make Lyfe yours</h1>
+          <h1 class="onb-title" id="onb-title">Make Aero yours</h1>
           <p class="onb-sub">A few private details. Change them anytime.</p>
         </div>
         <form data-form="onboarding" class="onb-form" autocomplete="off">
@@ -6351,7 +6351,7 @@ function showOnboarding() {
             <div class="onb-seg" role="group" aria-labelledby="onb-commit-label">${COMMIT_OPTIONS.map(([v, l]) =>
               `<button type="button" class="onb-segbtn${s.commitment === v ? " sel" : ""}" data-action="onboard-commit" data-v="${v}" aria-pressed="${s.commitment === v}">${esc(l)}</button>`).join("")}</div>
           </div>
-          <button type="submit" class="auth-btn onb-submit">Enter Lyfe</button>
+          <button type="submit" class="auth-btn onb-submit">Enter Aero</button>
         </form>
       </section>
     </div>`;
@@ -6503,7 +6503,7 @@ window.addEventListener("lyfe:cloudconflict", event => {
   const payload = event && event.detail;
   if (!payload) return;
   onCloudRemote(payload, true);
-  toast("Lyfe changed in another signed-in session. The current account version was kept.");
+  toast("Your workspace changed in another signed-in session. The current account version was kept.");
 });
 
 async function resolveAuthAndBoot() {

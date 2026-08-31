@@ -1,12 +1,12 @@
 {
   "name": "AltPsi",
   "short_name": "AltPsi",
-  "description": "Aero, personal intelligence that learns your way.",
+  "description": "Personal software, built around the person.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#07090e",
-  "theme_color": "#07090e",
+  "background_color": "#f4f4f0",
+  "theme_color": "#f4f4f0",
   "icons": [
     {
       "src": "assets/altpsi_logo.svg",

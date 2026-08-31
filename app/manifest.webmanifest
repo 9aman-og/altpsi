@@ -1,18 +1,17 @@
 {
-  "name": "Lyfe - your life, lightly kept",
-  "short_name": "Lyfe",
-  "description": "A calm life workspace with Aero, your personal intelligence layer across tasks, projects, notes, connections, and context.",
+  "name": "Aero by AltPsi",
+  "short_name": "Aero",
+  "description": "A private personal-intelligence workspace across your day, projects, notes, people, and inbox.",
   "start_url": "./index.html",
   "scope": "./",
-  "id": "lyfe-app",
+  "id": "aero-workspace",
   "display": "standalone",
   "orientation": "any",
   "background_color": "#050505",
   "theme_color": "#050505",
   "categories": ["productivity", "lifestyle", "utilities"],
   "icons": [
-    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    { "src": "../assets/aero_logo.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" },
+    { "src": "../assets/aero_logo.png", "sizes": "1024x1024", "type": "image/png", "purpose": "any" }
   ]
 }

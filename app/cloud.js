@@ -263,8 +263,8 @@
         authentication_required: "Your session expired. Sign in again.",
         not_allowed: "This Aero execution route is private to its approved account.",
         execution_not_configured: "The protected Aero execution route is not configured yet.",
-        state_missing: "Lyfe needs to finish its first account sync before Aero can apply this.",
-        state_changed: "Lyfe changed after this plan was prepared. Review the current version again.",
+        state_missing: "Aero needs to finish its first account sync before applying this.",
+        state_changed: "Your workspace changed after this plan was prepared. Review the current version again.",
         approval_expired: "This approval expired. Review the plan again.",
         approval_replayed: "That approval was already used.",
         approval_invalid: "The approval no longer matches this exact plan.",
@@ -434,7 +434,7 @@
         authentication_required: "Your session expired. Sign in again.",
         not_allowed: "Secure Aero approvals are private to this account.",
         presence_not_configured: "Secure approvals are not configured yet.",
-        presence_secure_origin_required: "Open Lyfe on sonnesystems.com to manage secure approvals.",
+        presence_secure_origin_required: "Open Aero on sonnesystems.com to manage secure approvals.",
         presence_recent_sign_in_required: "Sign out and sign in again before adding a secure approval device.",
         presence_credential_exists: "A secure approval device is already enrolled.",
         presence_credential_not_found: "No secure approval device is enrolled.",
@@ -705,7 +705,7 @@
       var requestedRev = Number(rev || 0);
       var snapshot = sanitize(data);
       if (aeroExecutionEnabled) {
-        if (!Number.isSafeInteger(requestedRev) || requestedRev < 1) throw cloudError("The Lyfe revision is invalid.", 409, "invalid_revision");
+        if (!Number.isSafeInteger(requestedRev) || requestedRev < 1) throw cloudError("The workspace revision is invalid.", 409, "invalid_revision");
         pendingWrites += 1;
         var operation = writeChain.catch(function () {}).then(async function () {
           var committed = await sb.rpc("lyfe_compare_and_swap_state", {
