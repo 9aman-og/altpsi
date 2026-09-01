@@ -34,7 +34,7 @@ test("the account ledger is read on boot and after remote Lyfe changes", () => {
   assert.match(app, /const quarantined = AeroCore\.freshState\(\)[\s\S]*?state\.data\.aero = quarantined/);
   assert.match(app, /pendingEpisodes\.filter\(episode => !authoritativeEpisodeIds\.has\(episode\.id\)\)/);
   assert.match(app, /authoritative\.memoryRevision < cached\.memoryRevision/);
-  assert.match(app, /private memory paused/);
+  assert.match(app, /Memory paused/i);
 });
 
 test("the Edge route binds and verifies the canonical state digest", () => {

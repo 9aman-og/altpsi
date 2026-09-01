@@ -47,6 +47,7 @@ jobs:
           node app/aero-harness.test.js
           node app/aero-harness.benchmark.js
           node app/cloud.test.js
+          node --test app/aero-product-ui.test.mjs
           node --test app/aero-server-memory.test.mjs
           node --test supabase/functions/aero-execute/protocol.test.mjs
           node --test supabase/functions/aero-memory/protocol.test.mjs
