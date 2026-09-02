@@ -129,7 +129,7 @@
       var memories = data.aero && Array.isArray(data.aero.memories) ? data.aero.memories.filter(function (item) { return item.status === "active" || item.status === "provisional"; }) : [];
       return memories.length ? "I have " + memories.length + " active memor" + (memories.length === 1 ? "y" : "ies") + ". You can inspect or remove any of them in Archive." : "I have no active long-term memory yet.";
     }
-    return "I can help reason about this, but I need the outcome you want—not more background. What should be different when we’re done?";
+    return "I can help reason about this, but I need the outcome you want. What should be different when we’re done?";
   }
 
   function flowFor(request, actions) {
