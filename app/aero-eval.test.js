@@ -217,7 +217,7 @@ const indexHtml = fs.readFileSync(path.join(__dirname, "index.html"), "utf8");
 assert.ok(indexHtml.indexOf("aero-harness.js") < indexHtml.indexOf("aero-eval.js"), "the SHA-256 harness must load before evaluation");
 assert.ok(indexHtml.indexOf("aero-eval.js") < indexHtml.indexOf("app.js"), "evaluation must load before product instrumentation");
 const worker = fs.readFileSync(path.join(__dirname, "sw.js"), "utf8");
-assert.match(worker, /aero-eval\.js\?v=aero-core-2/, "the offline shell must include the evaluator");
+assert.match(worker, /aero-eval\.js\?v=[a-z0-9.-]+/i, "the offline shell must include the evaluator");
 const app = fs.readFileSync(path.join(__dirname, "app.js"), "utf8");
 assert.match(app, /aeroStudySalt/, "the product must keep a private sync-stable routine salt");
 assert.match(app, /result\.certificate && result\.certificate\.digest/, "production study rows must originate from completion receipts");

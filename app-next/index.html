@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4f5f7">
+  <meta name="color-scheme" content="light">
+  <title>Aero</title>
+  <meta name="description" content="Aero is your personal operating environment.">
+  <script>window.AERO_SHELL_BASE = "";</script>
+  <link rel="icon" href="brand-mark.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&amp;display=swap">
+  <link rel="stylesheet" href="styles.css?v=2">
+</head>
+<body>
+  <a class="skip-link" href="#surface">Skip to content</a>
+  <div class="app-shell" data-app-state="loading">
+    <header class="topbar">
+      <button class="brand" type="button" data-route="now" aria-label="Aero home">
+        <img src="brand-mark.svg" alt="">
+        <span>Aero</span>
+      </button>
+      <nav class="primary-nav" aria-label="Primary">
+        <button class="nav-item" type="button" data-route="now">Now</button>
+        <button class="nav-item" type="button" data-route="work">Work</button>
+        <button class="nav-item" type="button" data-route="archive">Archive</button>
+      </nav>
+      <div class="top-actions">
+        <button class="icon-button" type="button" aria-label="Search" data-action="search">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4 4"></path></svg>
+        </button>
+        <button class="profile-button" type="button" aria-label="Open settings" data-route="settings">A</button>
+      </div>
+    </header>
+
+    <main id="surface" class="surface" tabindex="-1" aria-live="polite">
+      <div class="boot-state"><img src="brand-mark.svg" alt=""><span>Opening Aero</span></div>
+    </main>
+
+    <div class="composer-wrap">
+      <form class="composer" data-form="composer">
+        <label class="sr-only" for="aero-input">Ask Aero</label>
+        <div class="attachment-strip" data-attachments hidden></div>
+        <textarea id="aero-input" rows="1" placeholder="Ask, capture, or make a change…"></textarea>
+        <div class="composer-tools">
+          <div>
+            <button class="composer-icon" type="button" data-action="attach" aria-label="Attach a file">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8.5 12.5 5.7-5.7a3 3 0 0 1 4.2 4.2l-7.7 7.7a4.5 4.5 0 0 1-6.4-6.4l7.4-7.4"></path></svg>
+            </button>
+            <button class="context-button" type="button" data-action="open-context"><span aria-hidden="true"></span><b data-source-count>0</b> sources</button>
+          </div>
+          <div>
+            <button class="composer-icon" type="button" data-action="voice" aria-label="Talk to Aero">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3"></path></svg>
+            </button>
+            <button class="send-button" type="submit" aria-label="Send to Aero" disabled>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 12 6-6 6 6M12 6v12"></path></svg>
+            </button>
+          </div>
+        </div>
+      </form>
+      <input id="attachment-input" type="file" accept=".txt,.md,.json,.html,.htm,text/plain,text/markdown,text/html,application/json" multiple hidden>
+    </div>
+
+    <nav class="mobile-nav" aria-label="Primary mobile navigation">
+      <button type="button" data-route="now"><span>Now</span></button>
+      <button type="button" data-route="work"><span>Work</span></button>
+      <button type="button" data-route="archive"><span>Archive</span></button>
+    </nav>
+  </div>
+
+  <div id="overlay-root"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="../app/supabase-config.js?v=2"></script>
+  <script src="../app/cloud.js?v=2"></script>
+  <script src="../app/aero-core.js?v=2"></script>
+  <script src="../app/aero-harness.js?v=2"></script>
+  <script src="../app/aero-eval.js?v=2"></script>
+  <script src="../app/aero-knowledge.js?v=2"></script>
+  <script src="core/store.js?v=2"></script>
+  <script src="core/aero.js?v=2"></script>
+  <script src="ui/views.js?v=2"></script>
+  <script src="app.js?v=2"></script>
+</body>
+</html>

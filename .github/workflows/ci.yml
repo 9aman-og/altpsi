@@ -40,6 +40,11 @@ jobs:
           node --check app/app.js
           node --check app/connect.js
           node --check app/connect-suite.js
+          node --check app-next/app.js
+          node --check app-next/core/store.js
+          node --check app-next/core/aero.js
+          node --check app-next/ui/views.js
+          node app-next/core/aero.test.js
           node app/aero-core.test.js
           node app/aero-eval.test.js
           node app/aero-memory.test.js
