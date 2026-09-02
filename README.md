@@ -33,3 +33,8 @@ site and `/app/#/aero` for the workspace.
 Run `python scripts/checks.py`, the JavaScript test commands in the CI workflow,
 and the backend test suite before publishing. The public-boundary check rejects
 credential-shaped values and legacy research paths.
+
+The execution and information-flow threat model is documented in
+[`app/AERO-HARNESS.md`](app/AERO-HARNESS.md); the primary-source research and
+honest evidence limits are in
+[`docs/FRONTIER-HARNESS-RESEARCH.md`](docs/FRONTIER-HARNESS-RESEARCH.md).

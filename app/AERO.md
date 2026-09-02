@@ -101,11 +101,16 @@ publishing, and destructive external actions are not valid v0 action types.
 
 ### Durable harness
 
-`aero-harness.js` keeps execution control outside the model loop. Its v0.4 run
+`aero-harness.js` keeps execution control outside the model loop. Its v0.5 run
 contract provides:
 
 - a SHA-256 contract digest that binds approval to intent, exact payload values,
-  route, capability, acceptance criteria, budget, policy, and rollback mode;
+  source flow, route, capability, acceptance criteria, budget, policy, and
+  rollback mode;
+- a deterministic Flow Governor in which only the user request and fixed system
+  policy can choose an operation;
+- provenance on every proposed field, with external content quarantined from
+  silent personal-memory promotion and memory deletion;
 - an allow-listed capability for each step and a denied state for unknown tools;
 - hard step, retry, cloud-call, and duration budgets;
 - immutable actions and a narrow fresh executor context for one step at a time;

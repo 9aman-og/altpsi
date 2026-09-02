@@ -37,6 +37,8 @@ Primary references:
       v
     permissioned context pack
       |
+      +--> flow governor ------> source / field / sink authorization
+      |                               |
       +--> epistemic governor --> clarify / answer / propose / refuse
       |                               |
       |                               v
@@ -96,6 +98,21 @@ capabilities, or certifies that its own work succeeded.
     Postgres transaction as the target change.
 17. Verified device removal revokes future assertions but preserves historical
     grant rows and completion-certificate evidence.
+18. Only the current user request and fixed system policy may choose an
+    operation and its cardinality. Workspace, external, model, derived, and
+    unknown sources are data.
+19. Every proposed action field carries source provenance. Joins inherit the
+    weakest trust and strongest sensitivity label.
+20. Sanitization can change content but cannot upgrade its origin or authority.
+21. External content cannot silently create personal memory or select a memory
+    deletion target. Promotion needs an explicit user memory request naming the
+    source.
+22. Secret-labeled values cannot enter an ordinary task, library, tracking, or
+    memory sink.
+23. The flow manifest and policy version are part of the exact approval digest
+    and are rechecked before local or signed-in execution.
+24. A blocked flow returns a source-to-field-to-sink counterexample and cannot
+    reach the review surface.
 
 ## Transaction-bound user presence
 
@@ -126,7 +143,16 @@ The interactive-auth bootstrap reads Supabase AMR evidence as documented in
 
 ## What the 2026 evidence changed
 
-The v0.4 design is a direct response to several recent results:
+The v0.5 design is a direct response to several recent results:
+
+- [CaMeL](https://arxiv.org/html/2503.18813) shows why both control flow and
+  value-level data flow need software-enforced capabilities outside the model.
+- [Sleeper Memory Poisoning](https://arxiv.org/html/2605.15338) demonstrates
+  that malicious external context can become a delayed cross-session authority
+  attack through persistent memory.
+- [FAVA](https://arxiv.org/html/2607.27267) separates semantic permission
+  extraction from deterministic graph authorization and returns precise
+  counterexamples for forbidden source-to-sink flows.
 
 - [LongHorizon-Harness](https://arxiv.org/html/2608.01964) shows large gains from
   explicit state, fresh-context execution, and an independent read-only auditor.
@@ -155,14 +181,15 @@ The v0.4 design is a direct response to several recent results:
 
 ## Deterministic invariant benchmark
 
-`aero-harness.benchmark.js` executes 18 adversarial scenarios across approval
-binding, tool security, verification, recovery, and termination. The
-deterministic Aero harness v0.4 passes 18/18. An intentionally minimal direct
-model-to-tool loop passes 0/18 because it has none of these controls.
+`aero-harness.benchmark.js` executes 25 adversarial scenarios across approval
+binding, information flow, tool security, verification, recovery, and
+termination. The deterministic Aero harness v0.5 passes 25/25. An intentionally
+minimal direct model-to-tool loop passes 0/25 because it has none of these
+controls.
 
-The v0.5 user-presence boundary is evaluated separately by protocol tests,
-static migration tests, and a production rollback test. It is not counted in
-the 18-case browser benchmark.
+The transaction-bound user-presence boundary is evaluated separately by
+protocol tests, static migration tests, and a production rollback test. It is
+not counted in the 25-case browser benchmark.
 
 This is a harness control experiment, not a benchmark of OpenClaw, Hermes, or
 any other third-party system. It proves that the implementation enforces its
@@ -172,6 +199,7 @@ Run it with:
 
 ```powershell
 node aero-harness.test.js
+node aero-flow.test.js
 node aero-harness.benchmark.js
 ```
 
@@ -256,6 +284,16 @@ and compensator still share one browser process. A tested FastAPI reference
 boundary provides encrypted server-owned contracts, one-use authority,
 deterministic patches, event chaining, completion certificates, and cross-
 restart recovery for reversible Lyfe records.
+
+The v0.5 Flow Governor labels user, workspace, external, model, derived, and
+unknown sources; deterministically authorizes operation types from the current
+user request; binds field provenance to the action contract; and quarantines
+external-to-memory promotion. Its focused adversarial groups and seven added
+benchmark scenarios pass. This is a deterministic browser policy, not a formal
+noninterference proof: field attribution remains heuristic, source metadata is
+trusted product code, and the signed-in server does not yet reconstruct a full
+permission graph from connector-origin attestations. See
+[`FRONTIER-HARNESS-RESEARCH.md`](../docs/FRONTIER-HARNESS-RESEARCH.md).
 
 The original compression counter grouped episodes by broad action family. That
 was useful directional telemetry but could pair unrelated tasks and overstate

@@ -12,13 +12,16 @@ layer that composes the others.
    provenance, confidence, and expiry.
 3. The epistemic governor separates observed facts, user assertions, inferences,
    and unresolved conflicts.
-4. The adaptation governor decides whether repeated evidence is strong enough to
+4. The Flow Governor keeps user/system control authority separate from
+   workspace, external, model, and derived data; it authorizes every
+   source-to-field-to-sink path before review.
+5. The adaptation governor decides whether repeated evidence is strong enough to
    alter defaults. A correction wins immediately; weak correlations do not.
-5. The router chooses a deterministic local function, local model, or explicitly
+6. The router chooses a deterministic local function, local model, or explicitly
    enabled remote model for each bounded step.
-6. The action engine produces an exact preview. Account-scoped presence binds the
+7. The action engine produces an exact preview. Account-scoped presence binds the
    approval to that preview before the transaction can commit.
-7. The evaluator records outcome-shaped telemetry without prompt content and
+8. The evaluator records outcome-shaped telemetry without prompt content and
    tests whether repeated work needs fewer words without losing intent accuracy.
 
 ## Authority boundary

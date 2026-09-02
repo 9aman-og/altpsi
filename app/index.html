@@ -119,16 +119,16 @@
 <div id="toast-root" role="status" aria-live="polite" aria-atomic="true"></div>
 <script src="supabase-config.js?v=aero-core-16"></script>
 <script src="cloud.js?v=aero-core-18"></script>
-<script src="aero-core.js?v=aero-core-15"></script>
-<script src="aero-harness.js?v=aero-core-27"></script>
+<script src="aero-core.js?v=aero-core-16"></script>
+<script src="aero-harness.js?v=aero-core-29"></script>
 <script src="aero-eval.js?v=aero-core-2"></script>
 <script src="aero-knowledge.js?v=aero-core-10"></script>
-<script src="app.js?v=aero-core-36"></script>
+<script src="app.js?v=aero-core-39"></script>
 <script>
 /* register the service worker so Aero installs and runs offline on Android.
    only over http/https (not file://). */
 if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
-  var workerRefreshKey = "aero.worker.refresh.aeroCore26";
+  var workerRefreshKey = "aero.worker.refresh.aeroCore30";
   if (!sessionStorage.getItem(workerRefreshKey)) {
     navigator.serviceWorker.addEventListener("controllerchange", function () {
       sessionStorage.setItem(workerRefreshKey, "1");

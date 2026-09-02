@@ -11,7 +11,7 @@ vm.runInThisContext(fs.readFileSync(path.join(__dirname, "aero-harness.js"), "ut
 
 const Harness = window.AeroHarness;
 assert.ok(Harness, "Aero Harness should load");
-assert.equal(Harness.VERSION, "aero-harness-v0.4");
+assert.equal(Harness.VERSION, "aero-harness-v0.5");
 
 function clone(value) { return JSON.parse(JSON.stringify(value)); }
 
@@ -234,4 +234,4 @@ assert.ok(cancelled.steps.every(step => step.status === "cancelled"));
 const bounded = Harness.createRun({ actions: Array.from({ length: 20 }, (_, index) => ({ type: "add_task", title: String(index) })) });
 assert.equal(bounded.steps.length, Harness.MAX_STEPS, "runs enforce a hard step budget");
 
-console.log("Aero Harness v0.4 adversarial checks passed (39 assertion groups)");
+console.log("Aero Harness v0.5 adversarial checks passed (39 assertion groups)");

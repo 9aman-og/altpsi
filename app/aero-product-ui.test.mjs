@@ -44,3 +44,17 @@ test("the offline shell uses the same versioned product assets as the page", () 
   assert.match(worker, new RegExp(style.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   assert.match(worker, new RegExp(script.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
 });
+
+test("every proposed change crosses the enforced source contract", () => {
+  assert.match(app, /flow:\s*aeroFlowManifest\(signal, context, actions, safeAttachments\)/);
+  assert.match(app, /run\.flow\.mode !== "enforce"/);
+  assert.match(app, /AeroHarness\.digestContract\(run\) !== run\.contractDigest/);
+  assert.match(app, /AeroHarness\.digestActions\(plannedActions\) !== AeroHarness\.digestActions\(message\.proposal\.actions\)/);
+  assert.match(app, /derived\.secret/);
+  assert.match(app, /id: `attachment\.\$\{index\}`/);
+  assert.doesNotMatch(app, /else\s*\{\s*applied = applyActions\(message\.proposal\.actions\);\s*\}/);
+});
+
+test("reminders do not become personal memory", () => {
+  assert.match(app, /remember\(\?!\\s\+to\\b\)/);
+});
