@@ -37,4 +37,6 @@ credential-shaped values and legacy research paths.
 The execution and information-flow threat model is documented in
 [`app/AERO-HARNESS.md`](app/AERO-HARNESS.md); the primary-source research and
 honest evidence limits are in
-[`docs/FRONTIER-HARNESS-RESEARCH.md`](docs/FRONTIER-HARNESS-RESEARCH.md).
+[`docs/FRONTIER-HARNESS-RESEARCH.md`](docs/FRONTIER-HARNESS-RESEARCH.md). The
+anti-spam proactivity contract and its verification live in
+[`app/AERO-ATTENTION.md`](app/AERO-ATTENTION.md).

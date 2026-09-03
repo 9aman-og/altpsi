@@ -237,6 +237,24 @@ The router records the engine that actually answered, latency, failure, and why
 the route was eligible. Subscriptions such as ChatGPT Plus and Google AI Pro are
 not treated as developer API credit.
 
+The clean-room app now implements that boundary for context-free general
+questions. When the signed-in, account-allowlisted free specialist is enabled,
+the browser sends only the current prompt, date, and intent family. It never
+sends the context pack, prior messages, Gmail, memory, projects, imported files,
+or attachment data. Workspace intent and direct actions stay local. A model may
+return action-shaped output, but the client discards it; only the deterministic
+local parser can open a reviewable action contract. Provider failure falls back
+locally and enters a short backoff instead of retrying aggressively.
+
+## Attention governance
+
+Proactivity is a separate deterministic decision system, not another model
+permission. Structured task and run facts enter a quiet Updates feed. Focus,
+quiet hours, source trust, learned silence, deduplication, and a daily budget
+decide whether one item may also interrupt. The normal budget is one per day; a
+second requires a distinct critical condition after at least one hour; two is a
+hard maximum. See [`AERO-ATTENTION.md`](AERO-ATTENTION.md).
+
 ## Evaluation scorecard
 
 No single benchmark can establish that Aero is the best harness. Release claims
@@ -311,6 +329,11 @@ short-lived approval hash, and commits the target with compare-and-swap in one
 transaction. Completed, stale, and cancelled runs remove duplicated Lyfe state
 and action subjects while retaining their digests and evidence. The browser
 keeps the raw approval token in memory only.
+
+The consumer shell also has a protected, stateless reasoning route for eligible
+general questions and a local attention governor. These additions improve
+answer usefulness and restraint; they do not change the execution authority
+boundary and do not count as longitudinal evidence for the compression gate.
 
 The 29 August 2026 production smoke covered prepare/cancel, exact commit,
 concurrent-revision rejection, journal inspection, replay denial, and privacy

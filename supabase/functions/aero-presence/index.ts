@@ -248,7 +248,10 @@ Deno.serve(async (req: Request) => {
       const options = await generateRegistrationOptions({
         rpName: RP_NAME,
         rpID: RP_ID,
-        userID: new TextEncoder().encode(user.id),
+        // Copy into an owned ArrayBuffer. Newer Deno versions correctly type
+        // TextEncoder output as ArrayBufferLike, while SimpleWebAuthn requires
+        // a transferable ArrayBuffer-backed identifier.
+        userID: Uint8Array.from(new TextEncoder().encode(user.id)),
         userName: opaqueUserName(user.id),
         userDisplayName: "Aero secure approvals",
         attestationType: "none",

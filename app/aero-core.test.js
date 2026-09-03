@@ -57,6 +57,11 @@ const privateGroqRoute = Aero.routePlan({ signal: "summarize my project notes", 
 assert.equal(privateGroqRoute.engine, "built-in", "personal Lyfe context must not be sent to Groq");
 const actionGroqRoute = Aero.routePlan({ signal: "remind me to call mum tomorrow", engines: { groq: true }, cloudAllowed: true });
 assert.equal(actionGroqRoute.engine, "built-in", "workspace actions stay in the local action engine");
+for (const prompt of ["what are my tasks?", "summarize my documents", "show our projects", "who are my contacts?", "read my emails"]) {
+  const pluralPrivateRoute = Aero.routePlan({ signal: prompt, engines: { groq: true }, cloudAllowed: true });
+  assert.equal(pluralPrivateRoute.engine, "built-in", `personal context must stay local: ${prompt}`);
+  assert.equal(pluralPrivateRoute.privacy, "private", `personal context must be private: ${prompt}`);
+}
 const multimodalRoute = Aero.routePlan({ signal: "inspect this audio recording and diagram", engines: { inkling: true, gpt: true }, cloudAllowed: true });
 assert.equal(multimodalRoute.engine, "inkling", "an allowed multimodal task can route to an Inkling specialist");
 const privateInklingRoute = Aero.routePlan({ signal: "summarize my private account recording", engines: { inkling: true }, cloudAllowed: true });
