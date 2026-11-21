@@ -61,12 +61,17 @@ jobs:
           node --test supabase/functions/aero-memory/protocol.test.mjs
           node --test supabase/functions/aero-presence/protocol.test.mjs
           node --test supabase/migrations/aero_execution_boundary.test.mjs
+          node --test supabase/migrations/aero_reconciliation.test.mjs
           node --test supabase/migrations/aero_server_owned_memory.test.mjs
           node --test supabase/migrations/aero_presence_boundary.test.mjs
           deno check supabase/functions/aero-execute/index.ts
           deno check supabase/functions/aero-memory/index.ts
           deno check supabase/functions/aero-presence/index.ts
           deno check supabase/functions/aero-groq/index.ts
+      - name: Aero recovery against PostgreSQL
+        run: |
+          npm install --prefix "$RUNNER_TEMP/aero-recovery" --no-audit --no-fund --ignore-scripts @electric-sql/pglite@0.5.17
+          AERO_TEST_PGLITE_DIR="$RUNNER_TEMP/aero-recovery/node_modules/@electric-sql/pglite" node --test app-next/core/aero-recovery.test.mjs
 
   backend-tests:
     name: Backend tests

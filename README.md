@@ -39,4 +39,6 @@ The execution and information-flow threat model is documented in
 honest evidence limits are in
 [`docs/FRONTIER-HARNESS-RESEARCH.md`](docs/FRONTIER-HARNESS-RESEARCH.md). The
 anti-spam proactivity contract and its verification live in
-[`app/AERO-ATTENTION.md`](app/AERO-ATTENTION.md).
+[`app/AERO-ATTENTION.md`](app/AERO-ATTENTION.md). Durable ambiguous-outcome
+settlement, its token-free recovery envelope, and the no-blind-retry contract
+are specified in [`app/AERO-RECOVERY.md`](app/AERO-RECOVERY.md).

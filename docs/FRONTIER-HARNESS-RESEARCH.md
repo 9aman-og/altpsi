@@ -1,6 +1,6 @@
 # Aero frontier-harness research note
 
-Research snapshot: 2 September 2026. The working review covered 156 fetched
+Research snapshot: 21 November 2026. The initial working review covered 156 fetched
 results across 16 workstreams, deduplicated to 146 distinct sources. This note
 records the evidence that changed the product architecture. It is not a claim
 that Aero is categorically better than every other agent system.
@@ -96,6 +96,36 @@ execution, read-only audit, atomic compensation, and a completion certificate.
 The flow governor is placed before that boundary and its digest is passed into
 execution, audit, and compensation contexts.
 
+### Exactly-once lives at the effect boundary
+
+[Where Does Exactly-Once Live?](https://arxiv.org/html/2609.29095),
+[Permission to Retry](https://arxiv.org/html/2610.31916), and
+[Evidence-Guided Recovery](https://arxiv.org/html/2610.41453) sharpen a residual
+failure that remains after atomic execution: the effect can commit while its
+response is lost. A durable checkpoint cannot distinguish committed,
+not-committed, and still-in-flight by itself. Empty or stale reads do not prove
+absence, and blind redelivery can duplicate the effect while the agent still
+reports success.
+
+Aero's owned-state protocol therefore persists an effect reservation before
+dispatch, separates read-only reconciliation from authority to dispatch again,
+and treats `Unknown` as a first-class nonterminal state. After an ambiguous
+commit, the existing cancel RPC is used as a row-lock fence and the durable run
+is inspected. Commit or cancellation wins the same lock, producing a terminal
+completed or cancelled record without replaying the write. Recovered completion
+requires matching the authenticated commit journal, certificate fields, stored
+payload, contract, target, and revision. The optional database rollout adds a
+checksum check on the certificate itself. See
+[`AERO-RECOVERY.md`](../app/AERO-RECOVERY.md).
+
+[CapLease](https://arxiv.org/html/2608.01710) and the
+[Temporal Activity definition](https://docs.temporal.io/activity-definition)
+also make the boundary clear: durable admission and workflow replay do not make
+a non-idempotent sink exactly once. Before Aero enables public, payment, email,
+or arbitrary connector writes, each provider must expose an enforced stable key
+or an authoritative effect-status contract. Otherwise Aero must retain the
+unknown reservation and hand off instead of guessing.
+
 ## Implemented v0.5 policy
 
 | Source | Origin | May choose an operation? | May provide field data? | May silently become memory? |
@@ -138,6 +168,9 @@ that Aero enforces the declared invariants.
    cause an effect. Source display and factual evaluation remain necessary.
 5. No real longitudinal participant trial has yet proved the communication-
    compression north star.
+6. The owned-state settlement protocol is implemented and fault-tested with
+   PostgreSQL. A live browser disconnect trial with device verification is
+   outstanding. Third-party effect contracts remain disabled.
 
 ## Next evidence gates
 
@@ -152,3 +185,7 @@ that Aero enforces the declared invariants.
 5. Run the preregistered N-of-1 study: at least 30 matched pairs across 12 real
    routines and seven days, measuring fewer user words without lower verified
    first-pass intent accuracy.
+6. Run process-restart fault injection at every effect boundary, including late
+   commit, response loss, both fence lock orders, receipt-sync loss, and
+   authority revocation. Grade duplicate effects and false completion
+   independently.

@@ -255,6 +255,21 @@ decide whether one item may also interrupt. The normal budget is one per day; a
 second requires a distinct critical condition after at least one hour; two is a
 hard maximum. See [`AERO-ATTENTION.md`](AERO-ATTENTION.md).
 
+## Settlement and recovery
+
+An atomic transaction can commit even when its final network response is lost.
+Aero persists a token-free, account-scoped recovery envelope before dispatch.
+After an ambiguous response it does not retry. It uses cancellation as a
+database row-lock fence, then inspects the durable run: either commit won and a
+server-validated certificate proves the exact target, or cancellation won and
+zero effect is terminal. Inconclusive evidence remains `Unknown` and blocks a
+new dispatch.
+
+The product shows an applied, stopped, or unconfirmed outcome in Activity.
+The status check settles the original account change. Completed receipts
+remain locally recoverable until the account history confirms them. See
+[`AERO-RECOVERY.md`](AERO-RECOVERY.md).
+
 ## Evaluation scorecard
 
 No single benchmark can establish that Aero is the best harness. Release claims
@@ -268,6 +283,7 @@ require this scorecard across repeated trials.
 | False finish | Agent says done while a verifier fails | 0 in the release suite |
 | Authority | Unapproved or tampered plans executed | 0 across adversarial trials |
 | Replay | Duplicate side effects after resume | 0 across crash and retry trials |
+| Settlement | Ambiguous commit classified without redelivery | 100% for owned-state fault cases; unresolved external effects remain Unknown |
 | Memory | False promotion rate | At most 5% |
 | Recovery | Failed audit compensated and downstream work stopped | 100% in supported reversible actions |
 | Initiative | Unrequested conversation messages | 1 normally, 2 only for distinct urgency |
@@ -368,8 +384,8 @@ loss of that credential requires operator-assisted recovery. Unenrolled
 accounts retain review-click approval. WebAuthn proves user verification at an
 authenticator, not that the person understood the plan.
 
-The next evidence gates are a real-authenticator production trial, network-
-interruption trials around assertion and commit response loss, learned conflict
-detection with a held-out false-conflict set, and repeated Lyfe-native tasks
-with environment graders. The architecture and tests are designed so stronger
-claims can be earned rather than declared.
+The recovery suite checks both settlement outcomes, restarts, and receipt
+conflicts with the repository's Postgres migrations. A live WebAuthn and
+disconnect trial, learned conflict detection with a held-out false-conflict
+set, and repeated Lyfe-native tasks with environment graders still need
+verification.
